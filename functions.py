@@ -3,6 +3,11 @@ import maya.cmds as cmds
 # Functions for the buttons created in color_picker_ui.py
 
 def apply_color(color, view_check, out_check, shape_check, trans_check):
+
+    srgb_to_linear = lambda x: x / 12.92 if x < 0.04045 else ((x + 0.055) / 1.055) ** 2.4
+    lin_color = [srgb_to_linear(i) for i in color]
+
+
     # Get transform and shapes of selected objects
     sel_trans = cmds.ls(sl = True, l=True, o=True)
     sel_shape = cmds.listRelatives(sel_trans, f=True, s=True)
@@ -13,7 +18,7 @@ def apply_color(color, view_check, out_check, shape_check, trans_check):
         for obj_shape in sel_shape:
             cmds.setAttr(obj_shape+'.overrideEnabled',1)
             cmds.setAttr(obj_shape+'.overrideRGBColors',1)
-            cmds.setAttr(obj_shape+'.overrideColorRGB',color[0],color[1],color[2])
+            cmds.setAttr(obj_shape+'.overrideColorRGB',lin_color[0],lin_color[1],lin_color[2])
             for obj_trans in sel_trans:
                 cmds.setAttr(obj_trans+'.overrideEnabled',0)
     elif view_check and trans_check:
@@ -21,14 +26,14 @@ def apply_color(color, view_check, out_check, shape_check, trans_check):
         for obj_trans in sel_trans:
             cmds.setAttr(obj_trans+'.overrideEnabled',1)
             cmds.setAttr(obj_trans+'.overrideRGBColors',1)
-            cmds.setAttr(obj_trans+'.overrideColorRGB',color[0],color[1],color[2])
+            cmds.setAttr(obj_trans+'.overrideColorRGB',lin_color[0],lin_color[1],lin_color[2])
             for obj_shape in sel_shape:
                 cmds.setAttr(obj_shape+'.overrideEnabled',0)
     if out_check and shape_check:
         print("OUT AND SHAPE")
         for obj_shape in sel_shape:
             cmds.setAttr(obj_shape+'.useOutlinerColor', 1)
-            cmds.setAttr(obj_shape+'.outlinerColor', color[0], color[1], color[2])
+            cmds.setAttr(obj_shape+'.outlinerColor', lin_color[0], lin_color[1], lin_color[2])
             for obj_trans in sel_trans:
                 cmds.setAttr(obj_trans+'.overrideEnabled',0)
         cmds.select(cl=1)
@@ -37,7 +42,7 @@ def apply_color(color, view_check, out_check, shape_check, trans_check):
         print("OUT AND TRANS")
         for obj_trans in sel_trans:
             cmds.setAttr(obj_trans+'.useOutlinerColor', 1)
-            cmds.setAttr(obj_trans+'.outlinerColor', color[0], color[1], color[2])
+            cmds.setAttr(obj_trans+'.outlinerColor', lin_color[0], lin_color[1], lin_color[2])
             for obj_shape in sel_shape:
                 cmds.setAttr(obj_shape+'.overrideEnabled',0)
         cmds.select(cl=1)
