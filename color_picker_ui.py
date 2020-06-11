@@ -28,8 +28,11 @@ import json
 # For importing local related files.
 import os
 from .ui import main
+reload(main)
 from . import functions
+reload(functions)
 from . import defaults
+reload(defaults)
 
 
 # Directory path for local python file imports.
@@ -56,8 +59,9 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
 
     def __init__(self, *args):
         super(UiColorPickerWidget, self).__init__(*args)
-        self.maya_buttons = []
+        self.material_design_buttons = []
         self.custom_buttons = []
+        self.maya_index_buttons = []
         self.setupUi(self)
         self.build_buttons()
         self.on_tab_change()
@@ -68,9 +72,9 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
         self.outliner_box.stateChanged.connect(self.update_outliner_box)
         self.custom_button.clicked.connect(self.on_custom_color_change)
         self.cancel_button.clicked.connect(lambda: self.parent().close())
-        size = 35    # Adjust tab size
-        self.maya_tab.setMinimumWidth(8 * size)
-        self.maya_tab.setMinimumHeight(4 * size)
+        size = 32    # Adjust tab grid layout size
+        self.material_design_tab.setMinimumWidth(8 * size)
+        self.material_design_tab.setMinimumHeight(4 * size)
 
     def update_viewport_box(self):
         viewport_val = self.viewport_box.isChecked()
@@ -94,36 +98,51 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             raise RuntimeError(
                 "No swatch button selected"
                 )
+        # Turn off color management temporarily before opening colorEditor
+        cmds.colorManagementPrefs(e=True, cme=False)
         colorPick = cmds.colorEditor()
         values = cmds.colorEditor(query=True, rgb=True)
         btn.color = values
         all_buttons = self.update_color_buttons()
+        cmds.colorManagementPrefs(e=True, cme=True)
 
     def update_color_buttons(self):
         # Updates selected swatch button with chosen color
         # after clicking custom_button. This also updates
         # the button.json file to reflect new color list.
-        for i in range(self.maya_gridLayout.count()):
-            item = self.maya_gridLayout.itemAt(i)
+        for i in range(self.material_design_gridLayout.count()):
+            item = self.material_design_gridLayout.itemAt(i)
             is_child = isinstance(item.widget(), QtWidgets.QPushButton)
-            maya_key = "maya_colors"
-            maya_list = []
+            material_design_key = "material_design_colors"
+            material_design_list = []
             custom_key = "custom_colors"
             custom_list = []
-            for each in self.maya_buttons:
-                maya_list.append(each.color)
+###
+            maya_index_key = "maya_index_colors"
+            maya_index_list = []
+            for each in self.material_design_buttons:
+                material_design_list.append(each.color)
             for each in self.custom_buttons:
                 custom_list.append(each.color)
-            new_vals = dict(maya_colors=maya_list, custom_colors=custom_list)
+###
+            new_vals = dict(
+                            material_design_colors=material_design_list,
+                            custom_colors=custom_list,
+                            maya_index_colors=maya_index_list,
+                            )
         json_file = os.path.join(DIR_PATH, "buttons.json")
         if os.path.exists(json_file):
             with open(json_file, "w") as f:
                 json.dump(new_vals, f)
 
     def on_set_color(self):
-        color_list = self.maya_buttons
+        color_list = self.material_design_buttons
         if self.tabs.currentWidget() == self.custom_tab:
+            print("UNO")
             color_list = self.custom_buttons
+        elif self.tabs.currentWidget() == self.maya_index_tab:
+            print("DOS")
+            color_list = self.maya_index_buttons
         btn = None
         for button in color_list:
             if button.isChecked():
@@ -181,9 +200,14 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             if tab_name == "custom_colors":
                 self.custom_gridLayout.addWidget(button, row, column)
                 self.custom_buttons.append(button)
-            elif tab_name == "maya_colors":
-                self.maya_gridLayout.addWidget(button, row, column)
-                self.maya_buttons.append(button)
+            elif tab_name == "material_design_colors":
+                self.material_design_gridLayout.addWidget(button, row, column)
+                self.material_design_buttons.append(button)
+###
+            elif tab_name == "maya_index_colors":
+                self.maya_index_gridLayout.addWidget(button, row, column)
+                self.maya_index_buttons.append(button)
+
             else:
                 print("Error in grid_generation")
             if column == 7:

@@ -7,7 +7,7 @@ def apply_color(color, view_check, out_check, shape_check, trans_check):
     srgb_to_linear = lambda x: x / 12.92 if x < 0.04045 else ((x + 0.055) / 1.055) ** 2.4
     lin_color = [srgb_to_linear(i) for i in color]
 
-
+#11
     # Get transform and shapes of selected objects
     sel_trans = cmds.ls(sl = True, l=True, o=True)
     sel_shape = cmds.listRelatives(sel_trans, f=True, s=True)
