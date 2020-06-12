@@ -34,7 +34,6 @@ reload(functions)
 from . import defaults
 reload(defaults)
 
-
 # Directory path for local python file imports.
 DIR_PATH = os.path.dirname(__file__)
 
@@ -72,7 +71,7 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
         self.outliner_box.stateChanged.connect(self.update_outliner_box)
         self.custom_button.clicked.connect(self.on_custom_color_change)
         self.cancel_button.clicked.connect(lambda: self.parent().close())
-        size = 32    # Adjust tab grid layout size
+        size = 5    # Adjust tab grid layout size
         self.material_design_tab.setMinimumWidth(8 * size)
         self.material_design_tab.setMinimumHeight(4 * size)
 
