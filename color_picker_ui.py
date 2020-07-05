@@ -28,11 +28,8 @@ import json
 # For importing local related files.
 import os
 from .ui import main
-reload(main)
 from . import functions
-reload(functions)
 from . import defaults
-reload(defaults)
 
 # Directory path for local python file imports.
 DIR_PATH = os.path.dirname(__file__)
@@ -71,6 +68,8 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
         self.outliner_box.stateChanged.connect(self.update_outliner_box)
         self.custom_button.clicked.connect(self.on_custom_color_change)
         self.cancel_button.clicked.connect(lambda: self.parent().close())
+        self.shape_button.clicked.connect(lambda: self.on_shape_button_click())
+        self.transform_button.clicked.connect(lambda: self.on_transform_button_click())
         size = 5    # Adjust tab grid layout size
         self.material_design_tab.setMinimumWidth(8 * size)
         self.material_design_tab.setMinimumHeight(4 * size)
@@ -99,7 +98,7 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
                 )
         # Turn off color management temporarily before opening colorEditor
         cmds.colorManagementPrefs(e=True, cme=False)
-        colorPick = cmds.colorEditor()
+        color_pick = cmds.colorEditor()
         values = cmds.colorEditor(query=True, rgb=True)
         btn.color = values
         all_buttons = self.update_color_buttons()
@@ -116,14 +115,14 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             material_design_list = []
             custom_key = "custom_colors"
             custom_list = []
-###
             maya_index_key = "maya_index_colors"
             maya_index_list = []
             for each in self.material_design_buttons:
                 material_design_list.append(each.color)
             for each in self.custom_buttons:
                 custom_list.append(each.color)
-###
+            for each in self.maya_index_buttons:
+                maya_index_list.append(each.color)
             new_vals = dict(
                             material_design_colors=material_design_list,
                             custom_colors=custom_list,
@@ -202,7 +201,6 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             elif tab_name == "material_design_colors":
                 self.material_design_gridLayout.addWidget(button, row, column)
                 self.material_design_buttons.append(button)
-###
             elif tab_name == "maya_index_colors":
                 self.maya_index_gridLayout.addWidget(button, row, column)
                 self.maya_index_buttons.append(button)
@@ -211,6 +209,14 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
                 print("Error in grid_generation")
             if column == 7:
                 row += 1
+
+    # These last two exist solely to fix issue with non-exclusivity 
+    # breaking down after any color button is pressed
+    def on_shape_button_click(self):
+        self.transform_button.setChecked(False)
+
+    def on_transform_button_click(self):
+        self.shape_button.setChecked(False)
 
 
 class CreateButton(QtWidgets.QPushButton):
