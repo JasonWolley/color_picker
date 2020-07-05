@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:\Users\Walter\Desktop\color_picker\resource\main.ui'
+# Form implementation generated from reading ui file 'C:\Users\Walter\Documents\git\color_picker_working_files\resource\main.ui'
 #
-# Created: Thu Jun  4 00:16:50 2020
+# Created: Thu Jun 11 16:34:19 2020
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_color_picker_ui(object):
     def setupUi(self, color_picker_ui):
         color_picker_ui.setObjectName("color_picker_ui")
-        color_picker_ui.resize(591, 478)
+        color_picker_ui.resize(440, 402)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -104,8 +104,15 @@ class Ui_color_picker_ui(object):
         self.custom_gridLayout.setObjectName("custom_gridLayout")
         self.tabs.addTab(self.custom_tab, "")
         self.maya_index_tab = QtWidgets.QWidget()
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.maya_index_tab.sizePolicy().hasHeightForWidth())
+        self.maya_index_tab.setSizePolicy(sizePolicy)
         self.maya_index_tab.setObjectName("maya_index_tab")
         self.maya_index_gridLayout = QtWidgets.QGridLayout(self.maya_index_tab)
+        self.maya_index_gridLayout.setSpacing(0)
+        self.maya_index_gridLayout.setContentsMargins(0, 0, 0, 0)
         self.maya_index_gridLayout.setObjectName("maya_index_gridLayout")
         self.tabs.addTab(self.maya_index_tab, "")
         self.gridLayout_2.addWidget(self.tabs, 0, 0, 1, 1)
@@ -159,10 +166,12 @@ class Ui_color_picker_ui(object):
         self.shape_button = QtWidgets.QRadioButton(color_picker_ui)
         self.shape_button.setChecked(True)
         self.shape_button.setAutoRepeat(True)
+        self.shape_button.setAutoExclusive(True)
         self.shape_button.setObjectName("shape_button")
         self.override_check_layout.addWidget(self.shape_button)
         self.transform_button = QtWidgets.QRadioButton(color_picker_ui)
         self.transform_button.setAutoRepeat(True)
+        self.transform_button.setAutoExclusive(True)
         self.transform_button.setObjectName("transform_button")
         self.override_check_layout.addWidget(self.transform_button)
         self.horizontalLayout.addLayout(self.override_check_layout)
@@ -254,14 +263,14 @@ class Ui_color_picker_ui(object):
         self.gridLayout_2.addLayout(self.buttons_layout, 3, 0, 1, 1)
 
         self.retranslateUi(color_picker_ui)
-        self.tabs.setCurrentIndex(2)
+        self.tabs.setCurrentIndex(0)
         QtCore.QObject.connect(self.tabs, QtCore.SIGNAL("currentChanged(int)"), self.custom_button.hide)
         QtCore.QObject.connect(self.tabs, QtCore.SIGNAL("currentChanged(int)"), self.custom_button.show)
         QtCore.QMetaObject.connectSlotsByName(color_picker_ui)
 
     def retranslateUi(self, color_picker_ui):
         color_picker_ui.setWindowTitle(QtWidgets.QApplication.translate("color_picker_ui", "Form", None, -1))
-        self.tabs.setTabText(self.tabs.indexOf(self.material_design_tab), QtWidgets.QApplication.translate("color_picker_ui", "Default Colors", None, -1))
+        self.tabs.setTabText(self.tabs.indexOf(self.material_design_tab), QtWidgets.QApplication.translate("color_picker_ui", "Material Design", None, -1))
         self.tabs.setTabText(self.tabs.indexOf(self.custom_tab), QtWidgets.QApplication.translate("color_picker_ui", "Custom Palette", None, -1))
         self.tabs.setTabText(self.tabs.indexOf(self.maya_index_tab), QtWidgets.QApplication.translate("color_picker_ui", "Maya Index", None, -1))
         self.color_label.setText(QtWidgets.QApplication.translate("color_picker_ui", "Color:", None, -1))
