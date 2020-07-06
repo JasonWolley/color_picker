@@ -28,8 +28,11 @@ import json
 # For importing local related files.
 import os
 from .ui import main
+reload(main)
 from . import functions
+reload(functions)
 from . import defaults
+reload(defaults)
 
 # Directory path for local python file imports.
 DIR_PATH = os.path.dirname(__file__)
@@ -70,7 +73,7 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
         self.cancel_button.clicked.connect(lambda: self.parent().close())
         self.shape_button.clicked.connect(lambda: self.on_shape_button_click())
         self.transform_button.clicked.connect(lambda: self.on_transform_button_click())
-        size = 5    # Adjust tab grid layout size
+        size = 60    # Adjust tab grid layout size
         self.material_design_tab.setMinimumWidth(8 * size)
         self.material_design_tab.setMinimumHeight(4 * size)
 
