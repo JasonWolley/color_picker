@@ -22,6 +22,7 @@ from PySide2 import QtGui
 from shiboken2 import wrapInstance
 
 from maya import OpenMayaUI
+import maya.OpenMaya as om
 from maya import cmds
 import json
 
@@ -96,9 +97,7 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
                 btn = button
                 break
         if btn is None:
-            raise RuntimeError(
-                "No swatch button selected"
-                )
+            om.MGlobal.displayError("No swatch selected. Please select one.")
         # Turn off color management temporarily before opening colorEditor
         cmds.colorManagementPrefs(e=True, cme=False)
         color_pick = cmds.colorEditor()
@@ -138,21 +137,19 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
 
     def on_set_color(self):
         color_list = self.material_design_buttons
+        btn = None
         if self.tabs.currentWidget() == self.custom_tab:
-            print("UNO")
             color_list = self.custom_buttons
         elif self.tabs.currentWidget() == self.maya_index_tab:
-            print("DOS")
             color_list = self.maya_index_buttons
-        btn = None
         for button in color_list:
             if button.isChecked():
                 btn = button
+                chosen_color = btn.color
+                self.check_settings(chosen_color)
                 break
         if btn is None:
-            raise RuntimeError("No color button selected")
-        chosen_color = btn.color
-        self.check_settings(chosen_color)
+            om.MGlobal.displayError("No swatch selected. Please select one.")
 
     # 1 of 2 functions that sends to functions.py
     def on_restore_default(self):
