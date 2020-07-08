@@ -22,14 +22,18 @@ from PySide2 import QtGui
 from shiboken2 import wrapInstance
 
 from maya import OpenMayaUI
+import maya.OpenMaya as om
 from maya import cmds
 import json
 
 # For importing local related files.
 import os
 from .ui import main
+reload(main)
 from . import functions
+reload(functions)
 from . import defaults
+reload(defaults)
 
 # Directory path for local python file imports.
 DIR_PATH = os.path.dirname(__file__)
@@ -70,7 +74,7 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
         self.cancel_button.clicked.connect(lambda: self.parent().close())
         self.shape_button.clicked.connect(lambda: self.on_shape_button_click())
         self.transform_button.clicked.connect(lambda: self.on_transform_button_click())
-        size = 5    # Adjust tab grid layout size
+        size = 60    # Adjust tab grid layout size
         self.material_design_tab.setMinimumWidth(8 * size)
         self.material_design_tab.setMinimumHeight(4 * size)
 
@@ -92,17 +96,16 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             if button.isChecked():
                 btn = button
                 break
-        if btn is None:
-            raise RuntimeError(
-                "No swatch button selected"
-                )
+        if not btn:
+            om.MGlobal.displayWarning("No swatch selected. Please select one.")
         # Turn off color management temporarily before opening colorEditor
-        cmds.colorManagementPrefs(e=True, cme=False)
-        color_pick = cmds.colorEditor()
-        values = cmds.colorEditor(query=True, rgb=True)
-        btn.color = values
-        all_buttons = self.update_color_buttons()
-        cmds.colorManagementPrefs(e=True, cme=True)
+        else:
+            cmds.colorManagementPrefs(e=True, cme=False)
+            color_pick = cmds.colorEditor()
+            values = cmds.colorEditor(query=True, rgb=True)
+            btn.color = values
+            all_buttons = self.update_color_buttons()
+            cmds.colorManagementPrefs(e=True, cme=True)
 
     def update_color_buttons(self):
         # Updates selected swatch button with chosen color
@@ -135,21 +138,19 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
 
     def on_set_color(self):
         color_list = self.material_design_buttons
+        btn = None
         if self.tabs.currentWidget() == self.custom_tab:
-            print("UNO")
             color_list = self.custom_buttons
         elif self.tabs.currentWidget() == self.maya_index_tab:
-            print("DOS")
             color_list = self.maya_index_buttons
-        btn = None
         for button in color_list:
             if button.isChecked():
                 btn = button
+                chosen_color = btn.color
+                self.check_settings(chosen_color)
                 break
-        if btn is None:
-            raise RuntimeError("No color button selected")
-        chosen_color = btn.color
-        self.check_settings(chosen_color)
+        if not btn:
+            om.MGlobal.displayWarning("No swatch selected. Please select one.")
 
     # 1 of 2 functions that sends to functions.py
     def on_restore_default(self):
@@ -204,9 +205,6 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             elif tab_name == "maya_index_colors":
                 self.maya_index_gridLayout.addWidget(button, row, column)
                 self.maya_index_buttons.append(button)
-
-            else:
-                print("Error in grid_generation")
             if column == 7:
                 row += 1
 
