@@ -96,15 +96,16 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             if button.isChecked():
                 btn = button
                 break
-        if btn is None:
-            om.MGlobal.displayError("No swatch selected. Please select one.")
+        if not btn:
+            om.MGlobal.displayWarning("No swatch selected. Please select one.")
         # Turn off color management temporarily before opening colorEditor
-        cmds.colorManagementPrefs(e=True, cme=False)
-        color_pick = cmds.colorEditor()
-        values = cmds.colorEditor(query=True, rgb=True)
-        btn.color = values
-        all_buttons = self.update_color_buttons()
-        cmds.colorManagementPrefs(e=True, cme=True)
+        else:
+            cmds.colorManagementPrefs(e=True, cme=False)
+            color_pick = cmds.colorEditor()
+            values = cmds.colorEditor(query=True, rgb=True)
+            btn.color = values
+            all_buttons = self.update_color_buttons()
+            cmds.colorManagementPrefs(e=True, cme=True)
 
     def update_color_buttons(self):
         # Updates selected swatch button with chosen color
@@ -148,8 +149,8 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
                 chosen_color = btn.color
                 self.check_settings(chosen_color)
                 break
-        if btn is None:
-            om.MGlobal.displayError("No swatch selected. Please select one.")
+        if not btn:
+            om.MGlobal.displayWarning("No swatch selected. Please select one.")
 
     # 1 of 2 functions that sends to functions.py
     def on_restore_default(self):
@@ -204,9 +205,6 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
             elif tab_name == "maya_index_colors":
                 self.maya_index_gridLayout.addWidget(button, row, column)
                 self.maya_index_buttons.append(button)
-
-            else:
-                print("Error in grid_generation")
             if column == 7:
                 row += 1
 
