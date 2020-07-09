@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:\Users\Walter\Documents\git\color_picker_working_files\resource\main.ui'
 #
-# Created: Thu Jun 11 16:34:19 2020
+# Created: Thu Jul  9 00:31:55 2020
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -175,6 +175,11 @@ class Ui_color_picker_ui(object):
         self.transform_button.setObjectName("transform_button")
         self.override_check_layout.addWidget(self.transform_button)
         self.horizontalLayout.addLayout(self.override_check_layout)
+        self.line_3 = QtWidgets.QFrame(color_picker_ui)
+        self.line_3.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_3.setObjectName("line_3")
+        self.horizontalLayout.addWidget(self.line_3)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
         spacerItem3 = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -196,21 +201,21 @@ class Ui_color_picker_ui(object):
 "border-style: solid black;\n"
 "background: qradialgradient(\n"
 "cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,\n"
-"radius: 3, stop: 0 #fff, stop: 1 #888\n"
+"radius: 3, stop: 0 #ccff90, stop: 1 #888\n"
 ");\n"
 "padding: 8px;\n"
 "}\n"
 "QPushButton:hover {\n"
 "background: qradialgradient(\n"
-"cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,\n"
-"radius: 1, stop: 0 #fff, stop: 1 #bbb\n"
+"cx: 0.3, cy: -0.8, fx: 0.3, fy: -0.8,\n"
+"radius: 1, stop: 0 #ccff90, stop: 1 #bbb\n"
 ");\n"
 "}\n"
 "QPushButton:pressed {\n"
 "border-style: inset;\n"
 "background: qradialgradient(\n"
 "cx: 0.4, cy: -0.1, fx: 0.4, fy: -0.1,\n"
-"radius: 1.35, stop: 0 #fff, stop: 1 #ddd\n"
+"radius: 1.35, stop: 0 #ccff90, stop: 1 #ddd\n"
 ");\n"
 "}")
         self.custom_button.setCheckable(False)
@@ -270,18 +275,18 @@ class Ui_color_picker_ui(object):
 
     def retranslateUi(self, color_picker_ui):
         color_picker_ui.setWindowTitle(QtWidgets.QApplication.translate("color_picker_ui", "Form", None, -1))
-        self.tabs.setTabText(self.tabs.indexOf(self.material_design_tab), QtWidgets.QApplication.translate("color_picker_ui", "Material Design", None, -1))
+        self.tabs.setTabText(self.tabs.indexOf(self.material_design_tab), QtWidgets.QApplication.translate("color_picker_ui", "Color Palette", None, -1))
         self.tabs.setTabText(self.tabs.indexOf(self.custom_tab), QtWidgets.QApplication.translate("color_picker_ui", "Custom Palette", None, -1))
-        self.tabs.setTabText(self.tabs.indexOf(self.maya_index_tab), QtWidgets.QApplication.translate("color_picker_ui", "Maya Index", None, -1))
+        self.tabs.setTabText(self.tabs.indexOf(self.maya_index_tab), QtWidgets.QApplication.translate("color_picker_ui", "Maya Index Plus", None, -1))
         self.color_label.setText(QtWidgets.QApplication.translate("color_picker_ui", "Color:", None, -1))
         self.viewport_box.setText(QtWidgets.QApplication.translate("color_picker_ui", "Viewport", None, -1))
         self.outliner_box.setText(QtWidgets.QApplication.translate("color_picker_ui", "Outliner", None, -1))
         self.override_label.setText(QtWidgets.QApplication.translate("color_picker_ui", "Override:", None, -1))
         self.shape_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "Shape", None, -1))
         self.transform_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "Transform", None, -1))
-        self.custom_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "Add Custom Color To \n"
-"Selected Swatch Above", None, -1))
-        self.color_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "Update Color In Scene", None, -1))
+        self.custom_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "Click To Choose\n"
+"Color For Swatch", None, -1))
+        self.color_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "      Apply Color      ", None, -1))
         self.default_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "Restore Defaults", None, -1))
         self.cancel_button.setText(QtWidgets.QApplication.translate("color_picker_ui", "Cancel", None, -1))
 

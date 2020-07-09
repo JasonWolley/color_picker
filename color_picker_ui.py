@@ -1,13 +1,19 @@
-# The file color_picker.py creates a window with two tabs.
+# The file color_picker.py creates a window with three tabs.
 # Each tab is a QGridLayout populated with QPushButtons
-# that represent individual swatches for selection.
-# Maya Colors tab contains typically used colors.
+# generated from this file. Each button represents a swatch.
+# The colors in the Color Palette tab come from the
+# Material Design color tool which can be found at
+# https://material.io/resources/color.
 # Custom Colors tab has swatch buttons that can be
-# customized with colors chosen in colorEditor.
+# customized with colors chosen in colorEditor via the
+# "Add Custom.." button in the gui. The Maya Index tab
+# has most of the maya index colors with a few other useful
+# colors added to round out the selection.
+# Important functionality note:
 # If running for the first time, local file defaults.py
-# will be read and populate colors of Maya Colors tab
-# and create white ("blank") Custom Color buttons.
-# During first time loading the tool, a buttons.json
+# will be read and populate colors of Material Design and
+# Maya Colors tabs and create white ("blank") Custom Color 
+# buttons. During first time loading the tool, a buttons.json
 # file is written to record colors of all button swatches
 # and each time a button color is updated in the Custom Colors
 # tab, the button.json file is updated to reflect the new
@@ -29,11 +35,9 @@ import json
 # For importing local related files.
 import os
 from .ui import main
-reload(main)
 from . import functions
-reload(functions)
 from . import defaults
-reload(defaults)
+
 
 # Directory path for local python file imports.
 DIR_PATH = os.path.dirname(__file__)
@@ -73,7 +77,9 @@ class UiColorPickerWidget(QtWidgets.QWidget, main.Ui_color_picker_ui):
         self.custom_button.clicked.connect(self.on_custom_color_change)
         self.cancel_button.clicked.connect(lambda: self.parent().close())
         self.shape_button.clicked.connect(lambda: self.on_shape_button_click())
-        self.transform_button.clicked.connect(lambda: self.on_transform_button_click())
+        self.transform_button.clicked.connect(
+                lambda: self.on_transform_button_click()
+                )
         size = 60    # Adjust tab grid layout size
         self.material_design_tab.setMinimumWidth(8 * size)
         self.material_design_tab.setMinimumHeight(4 * size)
@@ -247,18 +253,18 @@ class CreateButton(QtWidgets.QPushButton):
                     background-color: {color};
                 }}
                QPushButton::hover{{
-                    background-color: {color}; 
-                    border: 3px solid black; 
+                    background-color: {color};
+                    border: 3px solid black;
                     border-radius: 20px;
                 }}
                QPushButton::pressed{{
-                    background-color: {color}; 
-                    border: 3px solid white; 
+                    background-color: {color};
+                    border: 3px solid white;
                     border-radius: 20px;
                 }}
                QPushButton::checked{{
-               color: {color}; background-color: {color}; 
-               border: 3px solid white; 
+               color: {color}; background-color: {color};
+               border: 3px solid white;
                border-radius: 20px;
                }}""".format(color=q_color.name()))
 
@@ -274,4 +280,4 @@ class ColorPickerWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Color Picker")
         self.setObjectName("colorPicker_window")
         self.setCentralWidget(self.main_widget)
-
+        
